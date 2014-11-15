@@ -37,6 +37,7 @@
 				});
 	        }
 	    }
+	    
 		function AddCustomerViewModel() {
 	        var self = this;
 	        self.name = ko.observable().extend({logChange: "name"});;
@@ -49,6 +50,7 @@
 	
 	        self.addCustomer = function() {
 	        
+	        	if (!formValidate()) return;
 	        	$('#add').modal('hide');
 				
 				$.ajax({
@@ -106,7 +108,6 @@
 				    success: function(data) {
 				    	for (var i = 0; i < customersViewModel.customers.length; i++) {
 				    		customer = customersViewModel.customers[i];
-				    						    		alert(data.id);
 				    						    		
 				    		if (data.id == customer.id())
 				    		{
@@ -136,13 +137,3 @@
 	    ko.applyBindings(addCustomerViewModel, $('#add')[0]); 
 	    ko.applyBindings(editCustomerViewModel, $('#edit')[0]);    
 
-		ko.extenders.logChange = function(target, option) {
-			alert("name change");
-		    target.subscribe(function(newValue) {
-		       console.log(option + ": " + newValue);
-		    });
-		    return target;
-		};	        
-
-	      
-    

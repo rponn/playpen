@@ -20,7 +20,9 @@ public class Customer {
 	@Size(min = 3, max = 30)
 	private String name;
 
+	@NotNull
 	private String email;
+
 	private String phone;
 	private String street;
 	private String city;
