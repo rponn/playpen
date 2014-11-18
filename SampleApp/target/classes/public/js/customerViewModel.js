@@ -31,16 +31,23 @@
 				    type: 'DELETE',
 				    url: '/customer',
 				    data:  JSON.stringify ({id: customer.id()}),
-				    success: function(data) {self.customers().splice(self.customers().indexOf(customer()),1);},
+				    success: function() {
+				    	for (var i = 0; i < self.customers().length; i++) {
+				    		var lcust = self.customers()[i];
+				    		if (lcust.id() == customer.id()){
+				    			self.customers().splice(i,1);
+				    		}
+				    	}	
+				    },
 				    contentType: "application/json",
-				    dataType: 'json'
+				    dataType: 'html'
 				});
 	        }
 	    }
 	    
 		function AddCustomerViewModel() {
 	        var self = this;
-	        self.name = ko.observable().extend({logChange: "name"});;
+	        self.name = ko.observable();
 	        self.email = ko.observable();
 	        self.phone = ko.observable();
 	        self.street = ko.observable();
@@ -99,16 +106,14 @@
 	            $('edit').modal('show');
 	        }
 	        self.editCustomer = function() {
-	            $('#edit').modal('hide');
 				
 				$.ajax({
 				    type: 'POST',
 				    url: '/customer',
 				    data: JSON.stringify ({id: self.id(), name: self.name(), email: self.email(), phone: self.phone(), street: self.street(), city: self.city(), state: self.state(), zip: self.zip()}),
 				    success: function(data) {
-				    	for (var i = 0; i < customersViewModel.customers.length; i++) {
-				    		customer = customersViewModel.customers[i];
-				    						    		
+				    	for (var i = 0; i < customersViewModel.customers().length; i++) {
+				    		customer = customersViewModel.customers()[i];
 				    		if (data.id == customer.id())
 				    		{
 				    			customer.id(data.id);
@@ -126,6 +131,7 @@
 				    contentType: "application/json",
 				    dataType: 'json'
 				});
+				$('#edit').modal('hide');
 	        }
     	}
     		
